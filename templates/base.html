@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MyDoc Healthcare | {% block title %}{% endblock %}</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1; /* Push footer down */
+    }
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .navbar-brand {
+      font-weight: 700;
+      color: #1e40af !important;
+      font-size: 1.5rem;
+      letter-spacing: -0.5px;
+    }
+    .navbar-nav .nav-link {
+      font-weight: 500;
+      margin: 0 8px;
+      color: #111827 !important;
+    }
+    .navbar-nav .nav-link:hover {
+      color: #1e40af !important;
+    }
+    .btn-login {
+      border: 1px solid #1e40af;
+      color: #1e40af;
+      border-radius: 50px;
+      padding: 6px 18px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-login:hover {
+      background: #1e40af;
+      color: white;
+    }
+    .hero-carousel {
+      height: 75vh;
+    }
+    .hero-carousel img {
+      object-fit: cover;
+      height: 75vh;
+    }
+    .carousel-caption {
+      bottom: 20%;
+    }
+    .carousel-caption h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+    .carousel-caption p {
+      font-size: 1.2rem;
+    }
+    /* Footer */
+    .footer-modern {
+      background: #111827;
+      color: #d1d5db;
+      padding: 2rem 0;
+      width: 100%;
+      text-align: center;
+    }
+    .footer-modern p {
+      margin: 0.5rem 0;
+      text-align: center;
+    }
+    .footer-modern a {
+      color: #9ca3af;
+      text-decoration: none;
+      margin: 0 10px;
+      display: inline-block;
+    }
+    .footer-modern a:hover {
+      color: white;
+    }
+  </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top shadow-sm mx-0">
+  <div class="container mx-0">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <i class="fas fa-user-md me-2"></i>MyDoc
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+      aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'chatbot' %}"><i class="fas fa-robot me-1"></i>AI Chatbot</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'doctors' %}"><i class="fas fa-user-md me-1"></i>Doctors</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'services' %}"><i class="fas fa-hospital me-1"></i>Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}"><i class="fas fa-info-circle me-1"></i>About</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'contact_us' %}"><i class="fas fa-phone me-1"></i>Contact</a></li>
+      </ul>
+      <a href="{% url 'login' %}" class="btn btn-login ms-lg-3">Login</a>
+    </div>
+  </div>
+</nav>
+
+<main class="main-content container py-5">
+  {% block body %}{% endblock body %}
+</main>
+
+<footer class="footer-modern mt-auto">
+  <div class="container text-center">
+    <p class="mb-1">&copy; 2025 MyDoc. All Rights Reserved.</p>
+    <p>
+      <a href="{% url 'services' %}">Services</a>
+      <a href="{% url 'about' %}">About</a>
+      <a href="{% url 'contact_us' %}">Contact</a>
+    </p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

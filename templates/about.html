@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}About Us{% endblock title %}
+
+{% block extra_head %}
+<style>
+:root {
+  --primary-color: #2196f3;
+  --secondary-color: #174ea6;
+  --accent-color: #b6d0ff;
+  --bg-light: #fafdff;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #e3f0ff, #b6d0ff 60%, #fafdff 100%);
+  color: #174ea6;
+}
+.scroll-container { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.section {
+  min-height: 70vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 0 12px 0;
+  margin-bottom: 0;
+  transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
+  background: linear-gradient(120deg, #fafdff 80%, #e3f0ff 100%);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(33,150,243,0.07);
+}
+.section:not(:last-child) {
+  margin-bottom: 16px;
+}
+.section:hover {
+  box-shadow: 0 8px 32px rgba(33,150,243,0.18);
+  transform: scale(1.02);
+  background: linear-gradient(120deg, #e3f0ff 60%, #b6d0ff 100%);
+}
+h1 {
+  font-size: 4rem;
+  text-align: center;
+  background: linear-gradient(90deg, #2196f3, #174ea6, #b6d0ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+  margin-bottom: 20px;
+}
+h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #174ea6;
+}
+p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  text-align: center;
+  color: #174ea6;
+}
+.card {
+  background: linear-gradient(120deg, #e3f0ff 60%, #fafdff 100%);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 30px rgba(33,150,243,0.13);
+  margin: 10px;
+  width: 250px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  cursor: pointer;
+  color: #174ea6;
+}
+.card h3 {
+  color: #2196f3;
+}
+.card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 8px 40px rgba(33,150,243,0.25);
+  background: linear-gradient(120deg, #b6d0ff 60%, #e3f0ff 100%);
+  color: #174ea6;
+}
+.features { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+@media(max-width: 768px) {
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 1.5rem; }
+  p { font-size: 1rem; }
+  .features { flex-direction: column; align-items: center; }
+}
+/* Center the footer text and links */
+footer.footer-modern {
+  text-align: center !important;
+}
+footer.footer-modern p,
+footer.footer-modern a {
+  margin-left: auto;
+  margin-right: auto;
+  display: inline-block;
+}
+</style>
+{% endblock extra_head %}
+
+{% block body %}
+<div class="scroll-container">
+  <!-- Section 1: About Us -->
+  <section class="section">
+    <h1>About Us</h1>
+    <p>We are a passionate team dedicated to creating innovative and impactful solutions. Our mission is to blend creativity and technology to empower businesses and communities worldwide.</p>
+  </section>
+
+  <!-- Section 2: Mission -->
+  <section class="section">
+    <h2>Our Mission</h2>
+    <p>To deliver high-quality products and services that inspire and transform lives, while maintaining transparency, integrity, and innovation at our core.</p>
+  </section>
+
+  <!-- Section 3: Features -->
+  <section class="section">
+    <h2>What We Offer</h2>
+    <div class="features">
+      <div class="card">
+        <h3>🚀 Innovation</h3>
+        <p>We constantly explore new technologies to deliver creative solutions.</p>
+      </div>
+      <div class="card">
+        <h3>🤝 Collaboration</h3>
+        <p>We believe in teamwork and strong partnerships to achieve success.</p>
+      </div>
+      <div class="card">
+        <h3>🌍 Impact</h3>
+        <p>We strive to make a positive difference in the world through our work.</p>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock body %}

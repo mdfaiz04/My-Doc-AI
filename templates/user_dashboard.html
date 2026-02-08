@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}User Dashboard{% endblock title %}
+
+{% block extra_head %}
+<style>
+:root{
+  --primary:#2563eb;
+  --secondary:#38bdf8;
+  --accent:#818cf8;
+  --white:#fff;
+  --text:#1e293b;
+  --light:#64748b;
+}
+
+body{ background:#f0f6ff; }
+
+.dashboard-hero{
+  margin-top:70px;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  padding:55px 0;
+  text-align:center;
+  color:white;
+  border-radius:0 0 30px 30px;
+  box-shadow:0 4px 25px rgba(0,0,0,.1);
+}
+.dashboard-hero h1{ font-size:2.1rem;font-weight:700; }
+.dashboard-hero p{ opacity:.9;font-size:1.1rem; }
+
+.booking-box{
+  width:90%;max-width:450px;margin:40px auto;
+  background:white;padding:30px;border-radius:18px;
+  box-shadow:0 6px 22px rgba(0,0,0,.1);
+}
+
+.label{
+  font-size:1rem;font-weight:600;color:var(--text);
+  margin-bottom:8px;
+}
+
+.select-box, .date-box{
+  width:100%;padding:12px;border-radius:12px;
+  border:1px solid #d5dcef;font-size:1rem;
+  margin-bottom:20px;background:#f9fbff;
+}
+
+.book-btn{
+  width:100%;padding:14px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:white;font-size:1.05rem;font-weight:600;
+  cursor:pointer;transition:.2s;
+}
+.book-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+}
+
+.popup{
+  position:fixed;top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(.8);
+  background:white;padding:20px 25px;border-radius:16px;
+  box-shadow:0 6px 25px rgba(0,0,0,.2);
+  opacity:0;pointer-events:none;transition:.3s;font-weight:600;
+}
+.popup.show{
+  opacity:1;pointer-events:auto;
+  transform:translate(-50%,-50%) scale(1);
+}
+
+/* APPOINTMENTS TABLE */
+.appointments-box{
+  width:90%;max-width:900px;margin:30px auto 70px auto;
+  background:white;padding:25px;border-radius:18px;
+  box-shadow:0 6px 22px rgba(0,0,0,.1);
+}
+
+.appointments-box h2{
+  text-align:center;margin-bottom:20px;
+  font-size:1.5rem;color:var(--text);
+}
+
+table{
+  width:100%;border-collapse:collapse;margin-top:10px;
+}
+
+th, td{
+  padding:12px;border-bottom:1px solid #e4e8f5;font-size:.95rem;
+}
+th{
+  background:#eff4ff;color:#174ea6;font-weight:700;
+}
+
+.status{
+  padding:6px 12px;border-radius:12px;
+  font-weight:600;text-transform:capitalize;
+}
+.status.Pending{ background:#fff4cc;color:#a87500; }
+.status.Approved{ background:#d9ffdf;color:#0a7d24; }
+.status.Rejected{ background:#ffd6d6;color:#b30000; }
+
+</style>
+{% endblock extra_head %}
+
+{% block body %}
+
+<main>
+
+  <!-- HERO -->
+  <section class="dashboard-hero">
+    <h1 id="welcomeText">Welcome!</h1>
+    <p>Select a doctor and book your appointment</p>
+  </section>
+
+  <!-- BOOKING SECTION -->
+  <div class="booking-box">
+
+    <label class="label">Choose a Doctor:</label>
+    <select id="doctorSelect" class="select-box">
+      <option value="" disabled selected>Select Doctor</option>
+    </select>
+
+    <label class="label">Select Appointment Date:</label>
+    <input type="date" id="dateSelect" class="date-box" min="{{ today }}"/>
+
+    <button class="book-btn" onclick="bookAppointment()">Book Appointment</button>
+  </div>
+
+  <div id="popup" class="popup"></div>
+
+  <!-- APPOINTMENTS TABLE -->
+  <div class="appointments-box">
+    <h2>My Appointments</h2>
+
+    {% if appointments %}
+    <table>
+      <thead>
+        <tr>
+          <th>Doctor</th>
+          <th>Designation</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for appt in appointments %}
+        <tr>
+          <td>{{ appt.doc.name }}</td>
+          <td>{{ appt.doc.designation }}</td>
+          <td>{{ appt.day }}</td>  <!-- ✔ Correct DB date -->
+          <td>
+            <span class="status {{ appt.status }}">{{ appt.status }}</span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+    {% else %}
+      <p style="text-align:center;color:var(--light);">No appointments yet.</p>
+    {% endif %}
+  </div>
+
+</main>
+
+<script>
+const uname = localStorage.getItem("username");
+
+if(uname){
+  document.getElementById("welcomeText").innerText = "Welcome, " + uname + "!";
+}
+
+function showPopup(msg){
+  let p = document.getElementById("popup");
+  p.textContent = msg;
+  p.classList.add("show");
+  setTimeout(()=>p.classList.remove("show"),2500);
+}
+
+// LOAD DOCTORS
+async function loadDoctors() {
+  const res = await fetch("/api/doctors/all/");
+  const data = await res.json();
+
+  let select = document.getElementById("doctorSelect");
+  select.innerHTML = `<option value="" disabled selected>Select Doctor</option>`;
+
+  data.doctors.forEach(doc => {
+    select.innerHTML += `
+      <option value="${doc.username}">
+        ${doc.name} — ${doc.designation}
+      </option>
+    `;
+  });
+}
+
+loadDoctors();
+
+// BOOK APPOINTMENT
+async function bookAppointment(){
+  const doctorUsername = document.getElementById("doctorSelect").value;
+  const day = document.getElementById("dateSelect").value;
+
+  if(!doctorUsername){ showPopup("Please select a doctor"); return; }
+  if(!day){ showPopup("Please select a date"); return; }
+
+  let response = await fetch("/api/appointment/book/",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({
+      doctor_id: doctorUsername,
+      username: uname,
+      day: day
+    })
+  });
+
+  let data = await response.json();
+
+  if(!response.ok){
+    showPopup(data.error || "Booking failed");
+  } else {
+    showPopup("Appointment booked! Status: Pending");
+    setTimeout(() => location.reload(), 1200);
+  }
+}
+
+</script>
+
+{% endblock body %}

@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock title %}
+{% load static %}
+
+{% block extra_head %}
+<style>
+:root {
+  --primary: #2563eb;
+  --secondary: #38bdf8;
+  --accent: #818cf8;
+  --text-dark: #1e293b;
+  --text-light: #64748b;
+  --white: #fff;
+}
+
+body { background: #f1f5f9; }
+
+.dashboard-container {
+  margin-top: 80px;
+  max-width: 900px;
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card {
+  background: var(--white);
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+}
+
+.card h2 {
+  color: var(--primary);
+  margin-bottom: 15px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #eef3ff;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn:hover { opacity: 0.9; }
+
+ul {
+  padding-left: 20px;
+}
+
+ul li {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+</style>
+{% endblock extra_head %}
+
+{% block body %}
+
+<div class="dashboard-container">
+
+  <!-- ADD DOCTOR -->
+  <div class="card">
+    <h2>Add New Doctor</h2>
+
+    <input type="text" id="docName" placeholder="Doctor Full Name">
+    <input type="text" id="docUser" placeholder="Username (login name)">
+    <input type="password" id="docPass" placeholder="Password">
+    <input type="text" id="docDesignation" placeholder="Designation">
+
+    <button class="btn" onclick="addDoctor()">Add Doctor</button>
+  </div>
+
+  <!-- REGISTERED DOCTORS -->
+  <div class="card">
+    <h2>Registered Doctors</h2>
+    <div id="doctorList">Loading...</div>
+  </div>
+
+</div>
+
+<script>
+// Add doctor
+async function addDoctor() {
+  const name = document.getElementById("docName").value.trim();
+  const user = document.getElementById("docUser").value.trim();
+  const pass = document.getElementById("docPass").value.trim();
+  const designation = document.getElementById("docDesignation").value.trim();
+
+  if (!name || !user || !pass || !designation) {
+    alert("Fill all fields");
+    return;
+  }
+
+  const response = await fetch("/api/admin/add_doctor/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      admin_user: "admin",
+      admin_pass: "admin123",
+      username: user,
+      password: pass,
+      name: name,
+      designation: designation
+    })
+  });
+
+  const data = await response.json();
+
+  if (data.error)
+      alert("Error: " + data.error);
+  else
+      alert(data.msg);
+
+  loadDoctors();
+}
+
+// Load doctor list (only name + designation)
+async function loadDoctors() {
+  const response = await fetch("/api/doctors/all/");
+  const data = await response.json();
+
+  if (!data.doctors || data.doctors.length === 0) {
+    document.getElementById("doctorList").innerHTML =
+      "<p>No doctors registered yet.</p>";
+    return;
+  }
+
+  let html = "<ul>";
+  data.doctors.forEach(d => {
+    html += `
+      <li>
+        <b>${d.name || d.username}</b><br>
+        <span>Designation: ${d.designation || "N/A"}</span>
+      </li>
+    `;
+  });
+  html += "</ul>";
+
+  document.getElementById("doctorList").innerHTML = html;
+}
+
+loadDoctors();
+</script>
+
+{% endblock body %}

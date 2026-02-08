@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Services{% endblock title %}
+{% block body %}
+
+<!-- Page-specific CSS -->
+<style>
+:root{
+  --bg:#f0f6ff;
+  --primary:#1e40af;
+  --secondary:#3b82f6;
+  --text:#0f172a;
+  --muted:#475569;
+  --card-light:#ffffffd9;
+}
+
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  padding:40px 16px;
+}
+
+h1{
+  text-align:center;
+  font-size:38px;
+  margin-bottom:40px;
+  color:var(--primary);
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.services{
+  display:grid;
+  gap:40px;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.service{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  background:linear-gradient(135deg,#ffffff 0%,#e0edff 100%);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  transition:transform .4s ease, box-shadow .4s ease;
+  will-change: transform, box-shadow; /* performance hint */
+}
+.service:hover{
+  transform:translateY(-8px) scale(1.02); /* smoother, no 3D rotation */
+  box-shadow:0 14px 28px rgba(30,64,175,0.2);
+}
+
+.service img{
+  flex:1 1 420px;
+  width:100%;
+  height:320px;
+  object-fit:cover;
+  filter:brightness(0.95);
+  transition:transform .5s ease;
+  will-change: transform; /* smoother scaling */
+}
+.service:hover img{
+  transform:scale(1.05);
+  filter:brightness(1);
+}
+
+.service-content{
+  flex:1 1 380px;
+  padding:36px 28px;
+  background:var(--card-light);
+  backdrop-filter:blur(10px);
+  border-radius:18px;   /* smoother corners */
+  transition:background 0.4s ease;
+}
+.service:hover .service-content{
+  background:#ffffffee;
+}
+
+.service-content h2{
+  margin:0 0 16px;
+  font-size:26px;
+  color:var(--primary);
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.service-content p{
+  font-size:16px;
+  line-height:1.7;
+  color:var(--muted);
+  margin:0;
+}
+
+.service:nth-child(even){
+  flex-direction:row-reverse;
+}
+
+@media (max-width:900px){
+  .service,
+  .service:nth-child(even){flex-direction:column;}
+  .service img{height:240px;}
+}
+</style>
+
+<h1>Our Hospital Services</h1>
+
+<div class="services">
+
+  <section class="service">
+    <img src="{% static 'services/ai.jpg' %}" alt="AI Health Chatbot">
+    <div class="service-content">
+      <h2>AI Health Chatbot</h2>
+      <p>24/7 intelligent assistant that answers health questions, triages symptoms, and guides patients to the right specialist instantly and securely.</p>
+    </div>
+  </section>
+
+  <section class="service">
+    <img src="{% static 'services/appointment.jpg' %}" alt="Online Appointment Booking">
+    <div class="service-content">
+      <h2>Online Appointment Booking</h2>
+      <p>Book appointments in seconds, view real-time availability, and get instant confirmations—saving time and reducing waiting periods.</p>
+    </div>
+  </section>
+
+  <section class="service">
+    <img src="{% static 'services/doctors.jpg' %}" alt="Variety of Doctors">
+    <div class="service-content">
+      <h2>Variety of Doctors</h2>
+      <p>Meet top specialists across cardiology, neurology, pediatrics, orthopedics, dermatology, and more—all under one trusted platform.</p>
+    </div>
+  </section>
+
+  <section class="service">
+    <img src="{% static 'services/treatments.jpg' %}" alt="Medical Treatments">
+    <div class="service-content">
+      <h2>Advanced Medical Treatments</h2>
+      <p>From preventive care and diagnostics to complex surgeries and rehabilitation, we deliver cutting-edge treatments with compassionate care.</p>
+    </div>
+  </section>
+
+  <section class="service">
+    <img src="{% static 'services/advice.jpg' %}" alt="Health Tips">
+    <div class="service-content">
+      <h2>Health Tips & Wellness</h2>
+      <p>Stay informed with personalized health tips, wellness guides, and preventive care checklists tailored to your lifestyle.</p>
+    </div>
+  </section>
+
+  <section class="service">
+    <img src="{% static 'services/emergency.jpg' %}" alt="Emergency Support">
+    <div class="service-content">
+      <h2>Emergency Support</h2>
+      <p>Quick access to local hospitals, ambulance services, and emergency contacts with one-tap location sharing when every second matters.</p>
+    </div>
+  </section>
+
+</div>
+
+{% endblock body %}

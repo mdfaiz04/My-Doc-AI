@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us{% endblock title %}
+
+{% block extra_head %}
+<style>
+:root {
+  --primary-color: #2196f3;
+  --secondary-color: #174ea6;
+  --accent-color: #b6d0ff;
+  --bg-light: #fafdff;
+}
+body {
+  background: linear-gradient(135deg, #e3f0ff, var(--accent-color) 60%, var(--bg-light) 100%);
+}
+.section {
+  width: 90%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background: linear-gradient(120deg, var(--bg-light) 80%, #e3f0ff 100%);
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(33,150,243,0.15);
+  animation: fadeIn 1.2s ease-in-out;
+  margin: 40px auto 0 auto; /* Add top margin to push below navbar */
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+p {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--secondary-color);
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+.contact-form input, 
+.contact-form textarea {
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  outline: none;
+  font-size: 1rem;
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 2px 8px rgba(33,150,243,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.contact-form input:focus, 
+.contact-form textarea:focus {
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px rgba(33,150,243,0.2);
+}
+.contact-form textarea {
+  resize: none;
+  min-height: 120px;
+}
+.contact-form button {
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.contact-form button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(33,150,243,0.35);
+}
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: white;
+  padding: 20px 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(33,150,243,0.3);
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 1000;
+}
+.popup.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+</style>
+{% endblock extra_head %}
+
+{% block body %}
+<div class="d-flex justify-content-center align-items-center" style="min-height:70vh;">
+  <section class="section">
+    <h2>Contact Us</h2>
+    <p>We’d love to hear from you! Please fill out the form below and we’ll get back to you as soon as possible.</p>
+    <form class="contact-form" id="contactForm">
+      <input type="text" placeholder="Your Name" required>
+      <input type="tel" placeholder="Phone Number" required>
+      <input type="email" placeholder="Email (Optional)">
+      <textarea placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+    <div class="popup" id="popupMessage">✅ Message Sent Successfully. We Will Reach You At The Earliest</div>
+  </section>
+</div>
+<script>
+  const form = document.getElementById("contactForm");
+  const popup = document.getElementById("popupMessage");
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+    popup.classList.add("show");
+    setTimeout(() => {
+      popup.classList.remove("show");
+      form.reset();
+    }, 3000);
+  });
+</script>
+{% endblock body %}

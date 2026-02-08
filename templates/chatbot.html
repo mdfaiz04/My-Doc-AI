@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+
+{% block title %}Chatbot{% endblock title %}
+
+{% block body %}
+<div class="d-flex justify-content-center align-items-center" style="min-height:60vh;">
+  <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%; border-radius: 1rem; background: #fff;">
+    
+    <h3 class="mb-4 text-center" style="font-family: 'Poppins', sans-serif; font-weight: 600; color: #1e40af;">
+      Medical AI Chatbot
+    </h3>
+
+    <form method="post" class="mb-3">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="patient_query" class="form-label" style="font-weight: 500;">Describe Your Concern</label>
+        <textarea 
+          class="form-control" 
+          id="patient_query" 
+          name="patient_query" 
+          rows="4" 
+          placeholder="Describe your symptoms or ask a medical question..." 
+          required
+          aria-label="Patient medical query"
+          style="border-radius: 0.75rem; border: 1.5px solid #1e40af;"
+        >{{ request.POST.patient_query }}</textarea>
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn btn-primary w-100" 
+        style="background: linear-gradient(135deg, #1e40af, #0ea5e9); border-radius: 0.75rem; font-weight: 600;"
+        aria-label="Ask AI Doctor"
+      >
+        Ask AI Doctor
+      </button>
+    </form>
+
+    {% if response %}
+      <div class="alert alert-info mt-3" style="border-radius: 0.75rem; white-space: pre-line;">
+        <strong>AI Response:</strong><br>
+        {{ response|linebreaksbr }}
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock body %}
